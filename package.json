@@ -1,0 +1,36 @@
+{
+  "name": "dom-scripter",
+  "version": "0.1.1",
+  "description": "easily inject script tags and jsonld documents into your html document with this javascript module.",
+  "main": "dist/index.js",
+  "scripts": {
+    "release": "bash release/release.sh",
+    "build": "mkdir -p ./source-compiled && ./node_modules/.bin/babel ./source -d ./source-compiled && ./node_modules/.bin/browserify ./source-compiled/index.js -o ./dist/index.js && ./node_modules/.bin/minify ./dist/index.js --out-file ./dist/index.js && rm -rf ./source-compiled",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/muratgozel/dom-scripter.git"
+  },
+  "keywords": [
+    "javascript",
+    "dom",
+    "jsonld",
+    "injection"
+  ],
+  "author": "Murat Gözel <murat@gozel.com.tr>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/muratgozel/dom-scripter/issues"
+  },
+  "homepage": "https://github.com/muratgozel/dom-scripter#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.5",
+    "@babel/preset-env": "^7.4.5",
+    "babel-minify": "^0.5.0",
+    "babel-preset-minify": "^0.5.0",
+    "browserify": "^16.2.3",
+    "core-js": "^3.1.2"
+  }
+}
