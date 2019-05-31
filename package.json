@@ -1,11 +1,15 @@
 {
   "name": "dom-scripter",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "easily inject script tags and jsonld documents into your html document with this javascript module.",
   "main": "dist/index.js",
   "scripts": {
     "release": "bash release/release.sh",
-    "build": "mkdir -p ./source-compiled && ./node_modules/.bin/babel ./source -d ./source-compiled && ./node_modules/.bin/browserify ./source-compiled/index.js -o ./dist/index.js && ./node_modules/.bin/minify ./dist/index.js --out-file ./dist/index.js && rm -rf ./source-compiled",
+    "builds": "npm run build && npm run build-polyfilled && npm run build-browser && npm run build-browser-polyfilled",
+    "build": "BABEL_ENV=development ./node_modules/.bin/minify ./source/index.js --out-file ./dist/index.js && ls -l ./dist/index.js",
+    "build-polyfilled": "BABEL_ENV=production ./node_modules/.bin/babel ./source/index.js --out-file ./dist/polyfilled.js && ./node_modules/.bin/minify ./dist/polyfilled.js --out-file ./dist/polyfilled.js",
+    "build-browser": "BABEL_ENV=development ./node_modules/.bin/browserify -s Scripter ./source/index.js -o ./dist/browser.js && ./node_modules/.bin/minify ./dist/browser.js --out-file ./dist/browser.js",
+    "build-browser-polyfilled": "mkdir -p ./source-compiled && BABEL_ENV=production ./node_modules/.bin/babel ./source -d ./source-compiled && ./node_modules/.bin/browserify -s Scripter ./source-compiled/index.js -o ./dist/browser.polyfilled.js && ./node_modules/.bin/minify ./dist/browser.polyfilled.js --out-file ./dist/browser.polyfilled.js && rm -rf ./source-compiled",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

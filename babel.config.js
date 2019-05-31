@@ -5,18 +5,12 @@ module.exports = function(api) {
     ["@babel/env", {}]
   ]
   const envOpts = {
-    useBuiltIns: 'usage',
-    corejs: { version: 3, proposals: true }
+    useBuiltIns: env == 'development' ? false : 'usage',
+    corejs: {version: 3, proposals: true},
+    debug: true
   }
 
-  if (env == 'production') {
-    presets.push(['minify', { builtIns: false }])
-  }
-
-  if (env == 'development') {
-    presets.push(['minify', { builtIns: false }])
-    //envOpts.debug = true
-  }
+  presets.push(['minify', { builtIns: false }])
 
   presets[0][1] = envOpts
 

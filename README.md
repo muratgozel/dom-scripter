@@ -10,16 +10,39 @@ npm install dom-scripter
 
 ## Import
 
-The default file imported by the module is polyfilled, bundled `dist/index.js` file:
+This package exports multiple builds. Developer has the responsibility to choose the one that best fits to her/his needs.
+
+1. **Minified (default)**
+
+This is basically the source code itself but minified. There are no compilation and polyfills inside. Use it if you already have a compiler (like babel) and polyfills in your project. (which is mostly is the case.)
 
 ```js
-const scripter = require('dom-scripter')
+// just 1733 bytes
+const Scripter = require('dom-scripter')
 ```
 
-If you already have a compiler like babel or already polyfilling your codebase, using `./source/index.js` recommended.
+2. **Polyfilled and minified**
+
+The source code compiled with babel (with the configuration that can be found inside `babel.config.js` file) and minified. This build contains also polyfills which increases the size of the package dramatically. Polyfills added by the configuration that can be found inside the `.browserlistrc` file.
 
 ```js
-const scripter = require('dom-scripter/source')
+const Scripter = require('dom-scripter/dist/polyfilled')
+```
+
+3. **Bundle for browsers**
+
+The source code bundled with `browserify` to generate a `UMD` bundle. This bundle can be imported by html script tag. No compilation and polyfills. The variable attached to the browser's `window` object is `Scripter`.
+
+```html
+<script src="https://unpkg.com/dom-scripter@0/dist/browser.js" crossorigin type="text/javascript"></script>
+```
+
+4. **Polyfilled bundle for browsers**
+
+The source code compiled with babel and bundled with `browserify` to generate a `UMD` bundle. This bundle can be imported by html script tag. The variable attached to the browser's `window` object is `Scripter`.
+
+```html
+<script src="https://unpkg.com/dom-scripter@0/dist/browser.polyfilled.js" crossorigin type="text/javascript"></script>
 ```
 
 ## Use
@@ -37,6 +60,8 @@ Output inside the html document will be:
 ```html
 <script type="text/javascript" src="/path/to/script.js" id="identifier" async></script>
 ```
+
+`.inject` method returns a promise, which resoles when the script successfully injected into dom but be careful that the content of the script may not be ready to read or use.
 
 With all available options:
 
@@ -93,3 +118,13 @@ Removes injected element from DOM.
 ```js
 scripter.remove('identifier')
 ```
+
+## Babel Polyfills Report
+
+This module uses the following polyfills in its polyfilled builds.
+
+1. `es.array.index-of`
+2. `es.array.map`
+3. `es.object.keys`
+4. `es.object.to-string`,
+5. `es.promise`
