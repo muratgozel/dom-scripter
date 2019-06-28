@@ -6,6 +6,8 @@ function Scripter() {
 Scripter.prototype.inject = function inject(url, opts = {}) {
   const self = this
 
+  const stype = url.slice(url.lastIndexOf('.') +1, 2) == 'cs' ? 'css' : 'js'
+
   return new Promise(function(resolve, reject) {
     // return existing scripts
     if (typeof opts.id == 'string') {
@@ -26,7 +28,10 @@ Scripter.prototype.inject = function inject(url, opts = {}) {
     }, self.timeoutInterval)
 
     // create
+    const s = document.createElement(stype == 'js' ? 'script' : 'link')
+
     function onDone() {
+      if (stype == 'css') s.media = opts.media || 'all'
       clearTimeout(t)
       return resolve(opts.id)
     }
@@ -36,10 +41,16 @@ Scripter.prototype.inject = function inject(url, opts = {}) {
       return reject(err)
     }
 
-    const s = document.createElement('script')
+    if (stype == 'css') {
+      s.rel = 'stylesheet'
+      s.href = url
+      s.media = 'only x'
+    }
+    else {
+      s.type = opts.type || 'text/javascript'
+      s.async = opts.hasOwnProperty('async') ? opts.async : true
+    }
 
-    s.type = opts.type || 'text/javascript'
-    s.async = opts.hasOwnProperty('async') ? opts.async : true
     if (typeof opts.id == 'string') s.id = opts.id
     if (opts.attrs) {
       Object.keys(opts.attrs).map(function(name) {
@@ -61,7 +72,7 @@ Scripter.prototype.inject = function inject(url, opts = {}) {
       s.onerror = onErr
     }
 
-    s.src = url
+    if (stype == 'js') s.src = url
 
     let elems = document.getElementsByTagName('script')
     if (!elems || elems.length < 1) elems = document.getElementsByTagName('head')

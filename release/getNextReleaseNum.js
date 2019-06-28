@@ -14,12 +14,13 @@ const currentRelease = matchedReleases[0]
 
 // increment appropriate release number
 const parts = currentRelease.split('.')
-const r = [
-  type == 'major' ? parseFloat(parts[0]) + 1 : parts[0],
-  type == 'minor' ? parseFloat(parts[1]) + 1 : parts[1],
-  type == 'patch' ? parseFloat(parts[2]) + 1 : parts[2]
-]
-const nextRelease = r.join('.')
+const nextRelease =
+  type == 'major'
+    ? (parseFloat(parts[0]) + 1) + '.0.0' :
+  type == 'minor'
+    ? parts[0] + '.' + (parseFloat(parts[1]) + 1) + '.0' :
+  type == 'patch'
+    ? parts[0] + '.' + parts[1] + '.' + (parseFloat(parts[2]) + 1) : 'none'
 
 // save next release
 fs.writeFileSync('./VERSION', nextRelease, 'utf8')

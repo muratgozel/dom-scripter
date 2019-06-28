@@ -1,6 +1,6 @@
 # DOM Script Injector
 
-Easily inject script tags and jsonld documents into your html document with this javascript module.
+Easily inject scripts, stylesheets and jsonld documents into your html document with this javascript module.
 
 ## Install
 
@@ -17,39 +17,38 @@ This package exports multiple builds. Developer has the responsibility to choose
 This is basically the source code itself but minified. There are no compilation and polyfills inside. Use it if you already have a compiler (like babel) and polyfills in your project. (which is mostly is the case.)
 
 ```js
-// just 1733 bytes
 const Scripter = require('dom-scripter')
 ```
 
-2. **Polyfilled and minified**
+2. **UMD Bundle**
 
-The source code compiled with babel (with the configuration that can be found inside `babel.config.js` file) and minified. This build contains also polyfills which increases the size of the package dramatically. Polyfills added by the configuration that can be found inside the `.browserlistrc` file.
+The source code bundled with `browserify` to generate a `UMD` bundle. This bundle can also be imported by html script tag. No compilation and polyfills. The variable attached to the browser's `window` object is `Scripter`.
 
 ```js
-const Scripter = require('dom-scripter/dist/polyfilled')
+const Scripter = require('dom-scripter/dist/umd')
 ```
 
-3. **Bundle for browsers**
-
-The source code bundled with `browserify` to generate a `UMD` bundle. This bundle can be imported by html script tag. No compilation and polyfills. The variable attached to the browser's `window` object is `Scripter`.
+or
 
 ```html
-<script src="https://unpkg.com/dom-scripter@0/dist/browser.js" crossorigin type="text/javascript"></script>
+<script src="https://unpkg.com/dom-scripter@1/dist/umd.js" crossorigin type="text/javascript"></script>
 ```
 
-4. **Polyfilled bundle for browsers**
+3. **Polyfilled UMD bundle**
 
-The source code compiled with babel and bundled with `browserify` to generate a `UMD` bundle. This bundle can be imported by html script tag. The variable attached to the browser's `window` object is `Scripter`.
+The source code compiled with babel and bundled with `browserify` to generate a `UMD` bundle. This bundle can also be imported by html script tag. The variable attached to the browser's `window` object is `Scripter`.
 
 ```html
-<script src="https://unpkg.com/dom-scripter@0/dist/browser.polyfilled.js" crossorigin type="text/javascript"></script>
+<script src="https://unpkg.com/dom-scripter@0/dist/umd.polyfilled.js" crossorigin type="text/javascript"></script>
 ```
 
 ## Use
 
 The module exposes 3 API methods for user.
 
-### Inject script
+### Inject scripts and stylesheets
+
+**Simple example:**
 
 ```js
 scripter.inject('/path/to/script.js', {id: 'identifier'})
@@ -63,7 +62,7 @@ Output inside the html document will be:
 
 `.inject` method returns a promise, which resoles when the script successfully injected into dom but be careful that the content of the script may not be ready to read or use.
 
-With all available options:
+**With all available options:**
 
 ```js
 scripter.inject('/path/to/script.js', {
@@ -80,6 +79,36 @@ Output inside the html document will be:
 
 ```html
 <script type="text/javascript" src="/path/to/script.js" id="identifier" data-hey="hello"></script>
+```
+
+**Stylesheet example:**
+
+```js
+scripter.inject('/path/to/site.css', {id: 'identifier'})
+```
+
+Will be injected as:
+
+```html
+<link id="identifier" rel="stylesheet" href="/path/to/site.css">
+```
+
+**With all available options:**
+
+```js
+scripter.inject('/path/to/site.css', {
+  id: 'identifier',
+  media: 'all', // default is all
+  attrs: {
+    'data-hey': 'hello'
+  }
+})
+```
+
+Will be injected as:
+
+```html
+<link id="identifier" rel="stylesheet" href="/path/to/site.css" media="all" data-hey="hello">
 ```
 
 ### Inject JSON-LD Document
@@ -128,3 +157,4 @@ This module uses the following polyfills in its polyfilled builds.
 3. `es.object.keys`
 4. `es.object.to-string`,
 5. `es.promise`
+6. `es.array.last-index-of`

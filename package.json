@@ -1,15 +1,14 @@
 {
   "name": "dom-scripter",
-  "version": "0.1.2",
-  "description": "easily inject script tags and jsonld documents into your html document with this javascript module.",
+  "version": "1.0.0",
+  "description": "Easily inject scripts, stylesheets and jsonld documents into your html document with this javascript module.",
   "main": "dist/index.js",
   "scripts": {
     "release": "bash release/release.sh",
-    "builds": "npm run build && npm run build-polyfilled && npm run build-browser && npm run build-browser-polyfilled",
-    "build": "BABEL_ENV=development ./node_modules/.bin/minify ./source/index.js --out-file ./dist/index.js && ls -l ./dist/index.js",
-    "build-polyfilled": "BABEL_ENV=production ./node_modules/.bin/babel ./source/index.js --out-file ./dist/polyfilled.js && ./node_modules/.bin/minify ./dist/polyfilled.js --out-file ./dist/polyfilled.js",
-    "build-browser": "BABEL_ENV=development ./node_modules/.bin/browserify -s Scripter ./source/index.js -o ./dist/browser.js && ./node_modules/.bin/minify ./dist/browser.js --out-file ./dist/browser.js",
-    "build-browser-polyfilled": "mkdir -p ./source-compiled && BABEL_ENV=production ./node_modules/.bin/babel ./source -d ./source-compiled && ./node_modules/.bin/browserify -s Scripter ./source-compiled/index.js -o ./dist/browser.polyfilled.js && ./node_modules/.bin/minify ./dist/browser.polyfilled.js --out-file ./dist/browser.polyfilled.js && rm -rf ./source-compiled",
+    "builds": "npm run build && npm run build-umd && npm run build-umd-polyfilled",
+    "build": "BABEL_ENV=development ./node_modules/.bin/minify ./source -d ./dist && ls -lR ./dist",
+    "build-umd": "BABEL_ENV=development ./node_modules/.bin/browserify -s MyLittleLodash ./source/index.js -o ./dist/umd.js && ./node_modules/.bin/minify ./dist/umd.js --out-file ./dist/umd.js",
+    "build-umd-polyfilled": "mkdir -p ./source-compiled && BABEL_ENV=production ./node_modules/.bin/babel ./source -d ./source-compiled && ./node_modules/.bin/browserify -s MyLittleLodash ./source-compiled/index.js -o ./dist/umd.polyfilled.js && ./node_modules/.bin/minify ./dist/umd.polyfilled.js --out-file ./dist/umd.polyfilled.js && rm -rf ./source-compiled",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

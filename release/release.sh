@@ -26,6 +26,10 @@ changes=$(node ${release_dir}checkChanges.js)
 if [[ $changes == "yes" ]]; then
   # generate the next release tag
   next=$(node ${release_dir}getNextReleaseNum.js $1)
+  if [[ $next == "none" ]]; then
+    echo "👨‍🔧 couldn't compute the next release number."
+    exit 1
+  fi
 
   # push
   echo "Releasing new version (${next})..."
@@ -34,7 +38,7 @@ if [[ $changes == "yes" ]]; then
   git commit -m "$2"
   git push origin $branch
 else
-  echo "👨🏻‍💻 no changes detected in the codebase. nothing to push."
+  echo "👨‍🔧 no changes detected in the codebase. nothing to push."
   exit 1
 fi
 
