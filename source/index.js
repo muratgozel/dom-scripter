@@ -6,7 +6,8 @@ function Scripter() {
 Scripter.prototype.inject = function inject(url, opts = {}) {
   const self = this
 
-  const stype = url.slice(url.lastIndexOf('.') +1, 2) == 'cs' ? 'css' : 'js'
+  const lind = url.lastIndexOf('.')
+  const stype = url.slice( lind + 1, lind + 4 ) == 'css' ? 'css' : 'js'
 
   return new Promise(function(resolve, reject) {
     // return existing scripts
