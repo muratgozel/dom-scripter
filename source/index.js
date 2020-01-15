@@ -75,10 +75,13 @@ Scripter.prototype.inject = function inject(url, opts = {}) {
 
     if (stype == 'js') s.src = url
 
+    const validLocations = ['beforeScript', 'afterScript']
+    const location = opts.location ? opts.location : 'beforeScript'
+
     let elems = document.getElementsByTagName('script')
     if (!elems || elems.length < 1) elems = document.getElementsByTagName('head')
     const ref = elems[0]
-    ref.parentNode.insertBefore(s, ref)
+    ref.parentNode.insertBefore(s, location == 'afterScript' ? null : ref)
     elems = null
   })
 }

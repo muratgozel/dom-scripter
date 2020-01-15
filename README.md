@@ -71,7 +71,8 @@ scripter.inject('/path/to/script.js', {
   async: false,
   attrs: {
     'data-hey': 'hello'
-  }
+  },
+  location: 'beforeScript'
 })
 ```
 
@@ -80,6 +81,10 @@ Output inside the html document will be:
 ```html
 <script type="text/javascript" src="/path/to/script.js" id="identifier" data-hey="hello"></script>
 ```
+
+`location` property specifies where the script should be injected.
+- `beforeScript` (default) is before the first `script` tag in the document.
+- `afterScript` is after all the elements in document body.
 
 **Stylesheet example:**
 
