@@ -81,11 +81,11 @@ Scripter.prototype.inject = function inject(url, opts = {}) {
 
     if (opts.location == 'headEnd') {
       const head = document.getElementsByTagName('head')[0]
-      head.parentNode.insertBefore(s, null)
+      head.lastChild.parentNode.insertBefore(s, null)
     }
     else {
       const body = document.getElementsByTagName('body')[0]
-      body.parentNode.insertBefore(s, null)
+      body.lastChild.parentNode.insertBefore(s, null)
     }
   })
 }
