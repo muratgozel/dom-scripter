@@ -72,7 +72,7 @@ scripter.inject('/path/to/script.js', {
   attrs: {
     'data-hey': 'hello'
   },
-  location: 'beforeScript'
+  location: 'headEnd'
 })
 ```
 
@@ -83,8 +83,8 @@ Output inside the html document will be:
 ```
 
 `location` property specifies where the script should be injected.
-- `beforeScript` (default) is before the first `script` tag in the document.
-- `afterScript` is after all the elements in document body.
+- `headEnd` (default) is after the last element inside the head.
+- `bodyEnd` is after the last element inside the body.
 
 **Stylesheet example:**
 

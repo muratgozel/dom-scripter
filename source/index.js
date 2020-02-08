@@ -75,14 +75,18 @@ Scripter.prototype.inject = function inject(url, opts = {}) {
 
     if (stype == 'js') s.src = url
 
-    const validLocations = ['beforeScript', 'afterScript']
-    const location = opts.location ? opts.location : 'beforeScript'
+    const validLocations = ['headEnd', 'bodyEnd']
+    if (!opts.hasOwnProperty('location')) opts.location = 'headEnd'
+    if (validLocations.indexOf(opts.location) === -1) opts.location = 'headEnd'
 
-    let elems = document.getElementsByTagName('script')
-    if (!elems || elems.length < 1) elems = document.getElementsByTagName('head')
-    const ref = elems[0]
-    ref.parentNode.insertBefore(s, location == 'afterScript' ? null : ref)
-    elems = null
+    if (opts.location == 'headEnd') {
+      const head = document.getElementsByTagName('head')[0]
+      head.parentNode.insertBefore(s, null)
+    }
+    else {
+      const body = document.getElementsByTagName('body')[0]
+      body.parentNode.insertBefore(s, null)
+    }
   })
 }
 
