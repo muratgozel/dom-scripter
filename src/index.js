@@ -84,13 +84,13 @@ Scripter.prototype.injectJSONLD = function injectJSONLD(data, opts) {
 }
 
 Scripter.prototype.injectToLocation = function injectToLocation(elem, _location) {
-  const location = _location || self.supportedLocations[0]
-  if (self.supportedLocations.indexOf(location) === -1) return;
+  const location = _location || this.supportedLocations[0]
+  if (this.supportedLocations.indexOf(location) === -1) return;
   const docHead = document.getElementsByTagName('head')[0]
   const docBody = document.getElementsByTagName('body')[0]
-  if (location == 'headEnd') docHead.lastChild.parentNode.insertBefore(elem, null)
-  else if (location == 'bodyEnd') docBody.lastChild.parentNode.insertBefore(elem, null)
-  else if (location == 'bodyStart') docBody.firstChild.parentNode.insertBefore(elem, null)
+  if (location == 'headEnd') docHead.insertBefore(elem, null)
+  else if (location == 'bodyEnd') docBody.insertBefore(elem, null)
+  else if (location == 'bodyStart') docBody.insertBefore(elem, docBody.firstChild)
   else {}
   return;
 }

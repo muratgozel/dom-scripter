@@ -1,6 +1,6 @@
 {
   "name": "dom-scripter",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Inject/remove scripts, stylesheets and jsonld documents in html documents.",
   "main": "dist/dom-scripter.cjs.js",
   "scripts": {
@@ -20,7 +20,15 @@
     "jsonld",
     "injection"
   ],
-  "author": "Murat Gözel <murat@gozel.com.tr>",
+  "author": {
+    "name": "Murat Gözel",
+    "email": "murat@gozel.com.tr",
+    "url": "https://gozel.com.tr"
+  },
+  "funding": {
+    "type": "ko-fi",
+    "url": "https://ko-fi.com/muratgozel"
+  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/muratgozel/dom-scripter/issues"

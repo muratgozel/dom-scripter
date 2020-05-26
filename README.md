@@ -19,7 +19,7 @@ const scripter = require('dom-scripter')
 ```
 or via script tag:
 ```html
-<script src="https://unpkg.com/dom-scripter@2/dist/dom-scripter.iife.js" crossorigin type="text/javascript"></script>
+<script src="https://cdn.jsdelivr.net/npm/dom-scripter@2/dist/dom-scripter.iife.js" crossorigin type="text/javascript"></script>
 ```
 
 but there are lots of other options. See distribution report below.
@@ -39,7 +39,6 @@ Output inside the html document will be:
 `.inject` method returns a promise, which resoles when the script successfully injected into the dom but the content of the script may not be ready to read or use.
 
 **With all available options:**
-
 ```js
 scripter.inject('/path/to/script.js', {
   id: 'identifier',
@@ -58,8 +57,9 @@ Output inside the html document will be:
 **Add as many attributes as you want.** Properties and values placed inside the `attrs` property in options will be added to the `script` tag automatically like in the `inject` method.
 
 **Available locations.** `location` property specifies where the script should be injected.
-- `headEnd` (default) is after the last element inside the head.
-- `bodyEnd` is after the last element inside the body.
+- `headEnd` (default) is after the last element inside the head block.
+- `bodyEnd` is after the last element inside the body block.
+- `bodyStart` is before the first element inside body block.
 
 **Stylesheet example:**
 ```js
@@ -132,16 +132,16 @@ This is an auto-generated report that shows the type, name and size of the bundl
 [comment]: # (DISTRIBUTIONS_REPORT_START)
 ```js
 [
-  "dom-scripter.amd.js (2.13 KB)",
-  "dom-scripter.amd.polyfilled.js (18.88 KB)",
-  "dom-scripter.cjs.js (2.13 KB)",
-  "dom-scripter.cjs.polyfilled.js (18.87 KB)",
-  "dom-scripter.es.js (2.12 KB)",
-  "dom-scripter.es.polyfilled.js (18.86 KB)",
-  "dom-scripter.iife.js (2.14 KB)",
-  "dom-scripter.iife.polyfilled.js (18.88 KB)",
-  "dom-scripter.umd.js (2.29 KB)",
-  "dom-scripter.umd.polyfilled.js (19.03 KB)"
+  "dom-scripter.amd.js (2.08 KB)",
+  "dom-scripter.amd.polyfilled.js (18.82 KB)",
+  "dom-scripter.cjs.js (2.07 KB)",
+  "dom-scripter.cjs.polyfilled.js (18.82 KB)",
+  "dom-scripter.es.js (2.06 KB)",
+  "dom-scripter.es.polyfilled.js (18.80 KB)",
+  "dom-scripter.iife.js (2.08 KB)",
+  "dom-scripter.iife.polyfilled.js (18.82 KB)",
+  "dom-scripter.umd.js (2.24 KB)",
+  "dom-scripter.umd.polyfilled.js (18.98 KB)"
 ]
 ```
 [comment]: # (DISTRIBUTIONS_REPORT_END)
