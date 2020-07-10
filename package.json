@@ -1,6 +1,6 @@
 {
   "name": "dom-scripter",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "Inject/remove scripts, stylesheets and jsonld documents in html documents.",
   "main": "dist/dom-scripter.cjs.js",
   "scripts": {

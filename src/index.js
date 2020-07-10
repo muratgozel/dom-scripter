@@ -1,9 +1,8 @@
 function Scripter() {
-  //this.beingInjected = []
   this.timeout = 10000
 }
 
-Scripter.prototype.reCSSExt = /(.css)/g
+Scripter.prototype.reCSSExt = /(.css)/
 Scripter.prototype.supportedLocations = ['bodyEnd', 'bodyStart', 'headEnd']
 
 Scripter.prototype.inject = function inject(url, opts) {
@@ -16,9 +15,6 @@ Scripter.prototype.inject = function inject(url, opts) {
 
   return new Promise(function(resolve, reject) {
     if (document.getElementById(opts.id)) return resolve(opts.id)
-    //if (self.beingInjected.indexOf(opts.id) !== -1) return resolve(null)
-
-    //self.beingInjected.push(opts.id)
 
     let timer = setTimeout(function() {
       return reject(new Error('TIMEOUT'))
@@ -46,13 +42,11 @@ Scripter.prototype.inject = function inject(url, opts) {
     function onDone() {
       if (isCSS) elem.media = opts.media || 'all'
       clearTimeout(timer)
-      //self.beingInjected = self.beingInjected.filter(id => id != opts.id)
       return resolve(opts.id)
     }
 
     function onError(err) {
       clearTimeout(timer)
-      //self.beingInjected = self.beingInjected.filter(id => id != opts.id)
       return reject(err)
     }
 
@@ -86,6 +80,7 @@ Scripter.prototype.injectJSONLD = function injectJSONLD(data, opts) {
 Scripter.prototype.injectToLocation = function injectToLocation(elem, _location) {
   const location = _location || this.supportedLocations[0]
   if (this.supportedLocations.indexOf(location) === -1) return;
+
   const docHead = document.getElementsByTagName('head')[0]
   const docBody = document.getElementsByTagName('body')[0]
   if (location == 'headEnd') docHead.insertBefore(elem, null)
