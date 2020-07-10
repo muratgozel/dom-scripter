@@ -132,16 +132,16 @@ This is an auto-generated report that shows the type, name and size of the bundl
 [comment]: # (DISTRIBUTIONS_REPORT_START)
 ```js
 [
-  "dom-scripter.amd.js (2.08 KB)",
-  "dom-scripter.amd.polyfilled.js (18.82 KB)",
-  "dom-scripter.cjs.js (2.07 KB)",
-  "dom-scripter.cjs.polyfilled.js (18.82 KB)",
-  "dom-scripter.es.js (2.06 KB)",
-  "dom-scripter.es.polyfilled.js (18.80 KB)",
-  "dom-scripter.iife.js (2.08 KB)",
-  "dom-scripter.iife.polyfilled.js (18.82 KB)",
-  "dom-scripter.umd.js (2.24 KB)",
-  "dom-scripter.umd.polyfilled.js (18.98 KB)"
+  "dom-scripter.amd.js (1.84 KB)",
+  "dom-scripter.amd.polyfilled.js (18.40 KB)",
+  "dom-scripter.cjs.js (1.83 KB)",
+  "dom-scripter.cjs.polyfilled.js (18.40 KB)",
+  "dom-scripter.es.js (1.82 KB)",
+  "dom-scripter.es.polyfilled.js (18.39 KB)",
+  "dom-scripter.iife.js (1.84 KB)",
+  "dom-scripter.iife.polyfilled.js (18.41 KB)",
+  "dom-scripter.umd.js (2.00 KB)",
+  "dom-scripter.umd.polyfilled.js (18.56 KB)"
 ]
 ```
 [comment]: # (DISTRIBUTIONS_REPORT_END)
@@ -164,7 +164,6 @@ This is an auto-generated report that shows the pollyfils added by core-js to th
   "es.regexp.to-string",
   "es.string.iterator",
   "web.dom-collections.iterator",
-  "es.array.filter",
   "es.array.index-of",
   "es.array.map",
   "es.object.keys",

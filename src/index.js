@@ -1,5 +1,5 @@
 function Scripter() {
-  this.beingInjected = []
+  //this.beingInjected = []
   this.timeout = 10000
 }
 
@@ -16,9 +16,9 @@ Scripter.prototype.inject = function inject(url, opts) {
 
   return new Promise(function(resolve, reject) {
     if (document.getElementById(opts.id)) return resolve(opts.id)
-    if (self.beingInjected.indexOf(opts.id) !== -1) return resolve(null)
+    //if (self.beingInjected.indexOf(opts.id) !== -1) return resolve(null)
 
-    self.beingInjected.push(opts.id)
+    //self.beingInjected.push(opts.id)
 
     let timer = setTimeout(function() {
       return reject(new Error('TIMEOUT'))
@@ -46,13 +46,13 @@ Scripter.prototype.inject = function inject(url, opts) {
     function onDone() {
       if (isCSS) elem.media = opts.media || 'all'
       clearTimeout(timer)
-      self.beingInjected = self.beingInjected.filter(id => id != opts.id)
+      //self.beingInjected = self.beingInjected.filter(id => id != opts.id)
       return resolve(opts.id)
     }
 
     function onError(err) {
       clearTimeout(timer)
-      self.beingInjected = self.beingInjected.filter(id => id != opts.id)
+      //self.beingInjected = self.beingInjected.filter(id => id != opts.id)
       return reject(err)
     }
 
