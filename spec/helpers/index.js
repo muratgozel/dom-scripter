@@ -5,7 +5,7 @@ const doc = `
 <html>
 <head>
   <meta charset="utf-8">
-  <title>🙏⏳️</title>
+  <title>DOM Scripter Test Page</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 </head>
 <body>
@@ -14,7 +14,11 @@ const doc = `
 </body>
 </html>
 `
-global.window = new JSDOM(doc, {url: 'https://frondjs.org'}).window
+global.window = new JSDOM(doc, {
+  url: 'https://frondjs.org',
+  runScripts: 'dangerously',
+  resources: 'usable'
+}).window
 global.document = global.window.document
 global.navigator = global.window.navigator
 //window.fetch = () => {json: () => ''}

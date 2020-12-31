@@ -1,5 +1,5 @@
 # DOM Script Injector
-Inject/remove scripts, stylesheets and jsonld documents in html documents.
+Inject/remove scripts, stylesheets in html documents.
 
 ![NPM](https://img.shields.io/npm/l/dom-scripter)
 [![npm version](https://badge.fury.io/js/dom-scripter.svg)](https://badge.fury.io/js/dom-scripter)
@@ -15,81 +15,81 @@ npm install dom-scripter
 There are different types of distributions depending on your use case. Essentially, the package can be imported via require:
 
 ```js
-const scripter = require('dom-scripter')
+const DOMScripterLib = require('dom-scripter')
 ```
 or via script tag:
 ```html
-<script src="https://cdn.jsdelivr.net/npm/dom-scripter@2/dist/dom-scripter.iife.js" crossorigin type="text/javascript"></script>
+<script src="https://cdn.jsdelivr.net/npm/dom-scripter@3/dist/dom-scripter.iife.js" crossorigin type="text/javascript"></script>
 ```
-
 but there are lots of other options. See distribution report below.
 
-## Use
-### Inject scripts and stylesheets
-
-**Simple example:**
+## Usage
+Simply:
 ```js
-scripter.inject('/path/to/script.js', {id: 'identifier'})
-```
-Output inside the html document will be:
+const domscripter = DOMScripterLib.create()
 
-```html
-<script type="text/javascript" src="/path/to/script.js" id="identifier" async></script>
-```
-`.inject` method returns a promise, which resoles when the script successfully injected into the dom but the content of the script may not be ready to read or use.
-
-**With all available options:**
-```js
-scripter.inject('/path/to/script.js', {
-  id: 'identifier',
-  type: 'text/javascript',
-  async: false,
-  attrs: {
-    'data-hey': 'hello'
-  },
-  location: 'headEnd'
+domscripter.injectjs(url).then(function(elemid) {
+  // <script type="text/javascript" src="url" id="elemid" async></script>
+  // element id is auto generated
 })
 ```
-Output inside the html document will be:
-```html
-<script type="text/javascript" src="/path/to/script.js" id="identifier" data-hey="hello"></script>
-```
-**Add as many attributes as you want.** Properties and values placed inside the `attrs` property in options will be added to the `script` tag automatically like in the `inject` method.
-
-**Available locations.** `location` property specifies where the script should be injected.
-- `headEnd` (default) is after the last element inside the head block.
-- `bodyEnd` is after the last element inside the body block.
-- `bodyStart` is before the first element inside body block.
-
-**Stylesheet example:**
+With attributes:
 ```js
-scripter.inject('/path/to/site.css', {id: 'identifier'})
-```
-Will be injected as:
-```html
-<link id="identifier" rel="stylesheet" href="/path/to/site.css">
-```
-**With all available options:**
-```js
-scripter.inject('/path/to/site.css', {
-  id: 'identifier',
-  media: 'all', // default is all
+domscripter.injectjs(url, {
+  id: 'someid',
   attrs: {
-    'data-hey': 'hello'
+    'data-name': 'value'
   }
+}).then(function(elemid) {
+  // <script type="text/javascript" src="url" id="elemid" data-name="value" async></script>
+  // element id is "someid"
 })
 ```
-Will be injected as:
-
-```html
-<link id="identifier" rel="stylesheet" href="/path/to/site.css" media="all" data-hey="hello">
+Disable async loading:
+```js
+domscripter.injectjs(url, {async: false}).then(function(elemid) {
+  // <script type="text/javascript" src="url" id="elemid"></script>
+})
 ```
+Inject to different locations:
+```js
+domscripter.injectjs(url, {location: 'headEnd'}).then(function(elemid) {
+  /*
+  * <head>
+      <title></title>
+      <script type="text/javascript" src="url" id="elemid" async></script>
+    </head>
+  */
+})
 
-### Inject JSON-LD Document
-JSON-LD documents are used commonly to inject [**Google's Structured Data**][b7dd4d5a] for search engine optimization.
+domscripter.injectjs(url, {location: 'bodyStart'}).then(function(elemid) {
+  /*
+  * <body>
+      <script type="text/javascript" src="url" id="elemid" async></script>
+      <p></p>
+    </body>
+  */
+})
 
-  [b7dd4d5a]: https://developers.google.com/search/docs/guides/intro-structured-data "Google's Structured Data"
+domscripter.injectjs(url, {location: 'bodyEnd'}).then(function(elemid) {
+  /*
+  * <body>
+      <p></p>
+      <script type="text/javascript" src="url" id="elemid" async></script>
+    </body>
+  */
+})
+```
+Inject stylesheets in the same way:
+```js
+domscripter.injectcss(url).then(function(elemid) {
+  // <link id="elemid" rel="stylesheet" href="url">
+  // element id is auto generated
+})
+```
+All of the options above except async is available also for stylesheets.
 
+Inject **JSONLD** documents in the same way:
 ```js
 const doc = {
   "@type":"BreadcrumbList",
@@ -102,26 +102,26 @@ const doc = {
     }
   ]
 }
-scripter.injectJSONLD(doc, {id: 'identifier'})
-```
-Output inside the html document will be:
-```html
-<script type="application/ld+json" id="identifier">
-{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://example.com"}]}
-</script>
-```
-**Add as many attributes as you want.** Properties and values placed inside the `attrs` property in options will be added to the `script` tag automatically like in the `inject` method.
 
-### Remove Element
-Removes injected element from DOM.
-```js
-scripter.remove('identifier')
+domscripter.injectjsonld(doc).then(function(elemid) {
+  /*
+  * <script type="application/ld+json" id="identifier">
+  {"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://example.com"}]}
+  </script>
+  */
+})
 ```
+All of the options above except async is available also for JSONLD documents.
 
-### Timeout
-There is a property called `timeout` inside scripter which sets a maximum time to wait during the injection of script. You can change this time by:
+To remove an element:
 ```js
-scripter.timeout = 10000 // default is 10 seconds.
+domscripter.remove('identifier')
+```
+**Bonus feature:** Specifying global in javascript documents to indicate library that it should wait until the global appear in `window`.
+```js
+domscripter.injectjs(url, {id: 'someid', global: 'SomeGlobal'}).then(function('someid') {
+  // window.SomeGlobal is ready!
+})
 ```
 
 ---
@@ -132,16 +132,16 @@ This is an auto-generated report that shows the type, name and size of the bundl
 [comment]: # (DISTRIBUTIONS_REPORT_START)
 ```js
 [
-  "dom-scripter.amd.js (1.84 KB)",
-  "dom-scripter.amd.polyfilled.js (18.40 KB)",
-  "dom-scripter.cjs.js (1.83 KB)",
-  "dom-scripter.cjs.polyfilled.js (18.40 KB)",
-  "dom-scripter.es.js (1.82 KB)",
-  "dom-scripter.es.polyfilled.js (18.39 KB)",
-  "dom-scripter.iife.js (1.84 KB)",
-  "dom-scripter.iife.polyfilled.js (18.41 KB)",
-  "dom-scripter.umd.js (2.00 KB)",
-  "dom-scripter.umd.polyfilled.js (18.56 KB)"
+  "dom-scripter.amd.js (3.27 KB)",
+  "dom-scripter.amd.polyfilled.js (26.81 KB)",
+  "dom-scripter.cjs.js (3.27 KB)",
+  "dom-scripter.cjs.polyfilled.js (26.83 KB)",
+  "dom-scripter.es.js (3.25 KB)",
+  "dom-scripter.es.polyfilled.js (26.82 KB)",
+  "dom-scripter.iife.js (3.28 KB)",
+  "dom-scripter.iife.polyfilled.js (26.82 KB)",
+  "dom-scripter.umd.js (3.48 KB)",
+  "dom-scripter.umd.polyfilled.js (27.01 KB)"
 ]
 ```
 [comment]: # (DISTRIBUTIONS_REPORT_END)
@@ -153,36 +153,34 @@ This is an auto-generated report that shows the pollyfils added by core-js to th
 ```js
 // polyfills:
 [
-  "es.symbol",
-  "es.symbol.description",
-  "es.symbol.iterator",
-  "es.array.iterator",
   "es.object.get-prototype-of",
   "es.object.set-prototype-of",
-  "es.object.to-string",
-  "es.reflect.construct",
-  "es.regexp.to-string",
-  "es.string.iterator",
-  "web.dom-collections.iterator",
-  "es.array.index-of",
+  "es.array.join",
   "es.array.map",
+  "es.array.reverse",
   "es.object.keys",
-  "es.promise"
+  "es.object.to-string",
+  "es.promise",
+  "es.regexp.exec",
+  "es.regexp.to-string",
+  "es.string.replace",
+  "es.string.split"
 ]
 // based on the targets:
 {
-  "android": "4.4.3",
   "chrome": "49",
   "edge": "18",
-  "firefox": "52",
+  "firefox": "78",
   "ie": "10",
   "ios": "9.3",
-  "opera": "67",
-  "safari": "11.1",
+  "opera": "71",
+  "safari": "5.1",
   "samsung": "4"
 }
 ```
 [comment]: # (BABEL_POLYFILLS_REPORT_END)
+
+---
 
 Thanks for watching 🐬
 

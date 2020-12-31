@@ -1,7 +1,8 @@
-const scripter = require('../../dist/dom-scripter.cjs.js')
+const DOMScripterLib = require('../../src/index.js')
 
-describe('Scripter.', function() {
+describe('DOMScripter.', function() {
   const url = 'https://cdn.jsdelivr.net/npm/basekits@1/dist/basekits.iife.js'
+  const urlcss ='https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css'
   const jsonld = {
     "@type":"BreadcrumbList",
     "itemListElement": [
@@ -14,60 +15,63 @@ describe('Scripter.', function() {
     ]
   }
 
-  it('has a regex to detect if the file is a CSS file.', function() {
-    expect(scripter.reCSSExt.test('https://frondjs.org/sample.css')).toBe(true)
-    expect(scripter.reCSSExt.test('https://frondjs.org/sample.js')).toBe(false)
-    expect(scripter.reCSSExt.test('/sample.css')).toBe(true)
-    expect(scripter.reCSSExt.test('https://frondjs.org/sample.css?v=2.35')).toBe(true)
-    expect(scripter.reCSSExt.test('https://frondjs.org/sample.js?v=2.35')).toBe(false)
+  it('injects scripts.', async function() {
+    const domscripter = DOMScripterLib.create()
+    expect(typeof domscripter.injectjs).toBe('function')
+
+    const result = await domscripter.injectjs(url)
+    expect(result).toBe('js-iife-basekits-0')
+    expect(() => domscripter.injectjs(undefined)).toThrow()
+
+    const result2 = await domscripter.injectjs(url, {id: 'someid', attrs: {
+      'data-somekey': 'somevalue'
+    }})
+    expect(result2).toBe('someid')
+
+    try {
+      const result3 = await domscripter.injectjs(url, {id: 'otherid', global: 'InvalidGlobal'})
+      expect(1).toBe(0)
+    } catch (e) {
+      expect(1).toBe(1)
+    }
+
+    try {
+      const result4 = await domscripter.injectjs(url, {id: 'otherid2', global: 'Basekits'})
+      expect(1).toBe(1)
+    } catch (e) {
+      expect(1).toBe(0)
+    }
   })
 
-  it('injects script tag to the end of the body of the document by default.', function() {
-    expect(() => scripter.inject(url)).toThrow()
+  it('injects stylesheets.', async function() {
+    const domscripter = DOMScripterLib.create()
 
-    scripter.inject(url, {id: 'basekits'})
-    const script = document.getElementById('basekits')
-    expect(script).not.toBeNull()
-    expect(script.getAttribute('type')).toBe('text/javascript')
-    expect(script.getAttribute('async')).toBeDefined()
-    expect(script.getAttribute('src')).toBe(url)
-    setTimeout(function() {
-      expect(window.Basekits).toBeDefined()
-    }, 300)
-
-    const docBody = document.getElementsByTagName('body')[0]
-    expect(script).toEqual(docBody.lastChild)
+    const result = await domscripter.injectcss(urlcss, {id: 'bootstrap'})
+    expect(result).toBe('bootstrap')
+    expect(document.getElementById('bootstrap').id).toBe('bootstrap')
   })
 
-  it('accepts custom tag attributes from the user.', function() {
-    scripter.inject(url, {id: 'basekits0', attrs: {number: 0, 'data-num': 0}})
-    const script = document.getElementById('basekits0')
-    expect(script.getAttribute('number')).toBe('0')
-    expect(script.dataset.num).toBe('0')
+  it('can inject to a certain locations inside the document.', async function() {
+    const domscripter = DOMScripterLib.create()
+
+    const result = await domscripter.injectcss(urlcss, {id: 'bootstrap-head-end', location: 'headEnd'})
+    const elemid = document.getElementsByTagName('head')[0].querySelector('#bootstrap-head-end').id
+    expect(elemid).toBe('bootstrap-head-end')
+
+    const result2 = await domscripter.injectcss(urlcss, {id: 'bootstrap-body-start', location: 'bodyStart'})
+    const elemid2 = document.getElementsByTagName('body')[0].querySelector('#bootstrap-body-start').id
+    expect(elemid2).toBe('bootstrap-body-start')
+
+    const result3 = await domscripter.injectcss(urlcss, {id: 'bootstrap-body-end', location: 'bodyEnd'})
+    const elemid3 = document.getElementsByTagName('body')[0].querySelector('#bootstrap-body-end').id
+    expect(elemid3).toBe('bootstrap-body-end')
   })
 
-  it('removes any tag with an id.', function() {
-    scripter.remove('basekits0')
-    expect(document.getElementById('basekits0')).toBeNull()
-  })
+  it('injects jsonld documents.', function() {
+    const domscripter = DOMScripterLib.create()
 
-  it('injects script tag to the start of the body of the document.', function() {
-    scripter.inject(url, {id: 'basekits2', location: 'bodyStart'})
-    const script2 = document.getElementById('basekits2')
-    const docBody = document.getElementsByTagName('body')[0]
-    expect(script2).toEqual(docBody.firstChild)
-  })
-
-  it('injects script tag to the end of the head of the document.', function() {
-    scripter.inject(url, {id: 'basekits3', location: 'headEnd'})
-    const script3 = document.getElementById('basekits3')
-    const docHead = document.getElementsByTagName('head')[0]
-    expect(script3).toEqual(docHead.lastChild)
-  })
-
-  it('injects JSONLD documents.', function() {
-    scripter.injectJSONLD(jsonld, {id: 'samplejsonld'})
-    const script = document.getElementById('samplejsonld')
+    const jsonldid = domscripter.injectjsonld(jsonld)
+    const script = document.getElementById(jsonldid)
     expect(script).not.toBeNull()
     expect(script.getAttribute('type')).toBe('application/ld+json')
   })
